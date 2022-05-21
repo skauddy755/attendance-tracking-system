@@ -1,7 +1,7 @@
 {
-  "name": "indulge_squad_z",
+  "name": "ms-engage",
   "version": "1.0.0",
-  "description": "Improve the internship and job application process of CDC/SCPT",
+  "description": "An attendance tracking system which can be used by organisations to maintain the attendance the students/employees by face-detection using computer-vision of opencv",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
