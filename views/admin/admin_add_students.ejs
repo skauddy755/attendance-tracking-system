@@ -48,11 +48,21 @@
                               <td><%= student.full_name %></td>
                               <td><%= student.email %></td>
                               <td><%= student.contact %></td>
-                              <td><input name="candidates" value="<%= student.username%>" type="checkbox" class="form-check-input" style="width: 100%; height: 30px"></td>
+                              <td><input name="candidates" value="<%= student.userId%>" type="checkbox" class="form-check-input" style="width: 100%; height: 30px"></td>
                           </tr>
                         <% }) %>
                     </tbody>
                   </table>
+                  
+
+                  <button id="toggle" class="btn btn-lg btn-warning">Toggle All</button>
+                  <button id="reset" class="btn btn-lg btn-danger">Reset</button>
+                  <button id="save" class="btn btn-lg btn-secondary">Save Changes</button>
+                  <form action="<%= origin %>/admin/<%= userId %>/add_students" method="POST">
+                    <input id="selectedList" name="selectedList" type="text" style="display: none;">
+                    <button id="submit" type="submit" class="btn btn-lg btn-success">Submit</button>
+                  </form>
+                  
                   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
                   <script src="https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
                   <script src="https://cdn.datatables.net/1.12.0/js/dataTables.bootstrap4.min.js"></script>
@@ -61,6 +71,39 @@
                           $('#example').DataTable();
                       });
                   </script>
+
+                  <script>
+
+                    const toggleBtn = document.getElementById('toggle');
+                    toggleBtn.addEventListener('click', (e) => {
+                      candidates = document.getElementsByName('candidates');
+                      for(let i=0; i<candidates.length; i++) {
+                        candidates[i].checked = !candidates[i].checked;
+                      }
+                    });
+
+                    const resetBtn = document.getElementById('reset');
+                    resetBtn.addEventListener('click', (e) => {
+                      candidates = document.getElementsByName('candidates');
+                      for(let i=0; i<candidates.length; i++) {
+                        candidates[i].checked = false;
+                      }
+                    });
+
+                    const saveBtn = document.getElementById('save');
+                    saveBtn.addEventListener('click', (e) => {
+                      candidates = document.getElementsByName('candidates');
+                      const selected = [];
+                      for(let i=0; i<candidates.length; i++) {
+                        if(candidates[i].checked) selected.push(candidates[i].value);
+                      }
+                      console.log(selected);
+                      selectedList = document.getElementById('selectedList');
+                      selectedList.value = JSON.stringify(selected);
+                    });
+                    
+                  </script>
+
                 </div>
               </div>
             </div>

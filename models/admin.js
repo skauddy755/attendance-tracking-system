@@ -8,6 +8,7 @@ var adminSchema = new mongoose.Schema({
     email: String,
     contact: String,
     companyName: String,
+    students: [String] // ids of students who are part of the oranisation which the admin represents
 });
 
 module.exports = mongoose.model("Admin", adminSchema);

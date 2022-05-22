@@ -60,4 +60,26 @@ router.get('/:userId/add_students', middlewareObj.isLoggedIn, middlewareObj.chec
     });
 })
 
+router.post('/:userId/add_students', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
+    selected = JSON.parse(req.body.selectedList);
+    console.log(selected);
+    User.findById(req.params.userId, (err, user) => {
+        if(err) res.redirect('/index/home');
+        else {
+            Admin.findById(user.detailsId, (err, admin) => {
+                if(err) res.redirect('/index/home');
+                else {
+                    if(!admin.students) admin.students = [];
+                    for(s of selected) admin.students.push(s);
+
+                    admin.save((err, item) => {
+                        if(err) res.redirect('/index/home');
+                        else res.redirect('/add_students');
+                    });
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;
