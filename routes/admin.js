@@ -41,6 +41,61 @@ router.get('/:userId/dashboard', middlewareObj.isLoggedIn, middlewareObj.checkOw
     });
 })
 
+// =================================================================================
+// VIEW PROFILE:
+// =================================================================================
+router.get('/:userId/profile', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
+    User.findById(req.params.userId, async (err, user) => {
+        if(err) res.redirect('/index/home');
+        else {
+            Admin.findById(user.detailsId, (err, admin) => {
+                admin.username = user.username,
+                res.render('admin/admin_profile.ejs', {adminData: admin, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+            });
+        }
+    });
+})
+
+// =================================================================================
+// VIEW STUDENTS:
+// =================================================================================
+router.get('/:userId/view_students', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
+    User.findById(req.params.userId, (err, au) => {
+        if(err) res.redirect('/index/home');
+        else {
+            Admin.findById(au.detailsId, (err, admin) => {
+                if(err) res.redirect('/index/home');
+                else {
+                    const ht = new Map();
+                    for(s of admin.students) ht.set(s, true);
+
+                    User.find({}, async (err, sus) => {
+                        if(err) res.redirect('/index/home');
+                        else {
+                            const data = [];
+                            for(su of sus) {
+                                console.log(String(su._id));
+                                if(!ht.get(String(su._id))) continue;
+                                const std = await Student.findById(su.detailsId);
+                                std.userId = su._id;
+                                std.username = su.username;
+                                data.push(std);
+                            }
+                            console.log(data);
+                            res.render('admin/admin_view_students', {detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN})
+                        }
+                    });
+                }
+            });
+        }
+    });
+    
+});
+
+
+// =================================================================================
+// ADD STUDENTS:
+// =================================================================================
 router.get('/:userId/add_students', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
     User.find({}, async (err, users) => {
         if(err) res.redirect('/index/home');
@@ -74,7 +129,7 @@ router.post('/:userId/add_students', middlewareObj.isLoggedIn, middlewareObj.che
 
                     admin.save((err, item) => {
                         if(err) res.redirect('/index/home');
-                        else res.redirect('/add_students');
+                        else res.redirect(`/admin/${req.params.userId}/view_students`);
                     });
                 }
             });
