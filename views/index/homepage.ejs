@@ -8,9 +8,8 @@
     <!-- ion-icon -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <title>log in</title>
-    <!-- css -->
-    <title>Login</title>
+    <title>Attendance Tracking System</title>
+    <link rel = "icon" href = "<%= origin %>/static/images/logo2.png" type = "image/x-icon">
 
     <style>
         *{
@@ -77,15 +76,14 @@ body{
 
     <div id="box_background1"></div>
     <div class="shadow-lg bg-white rounded" style="width: 70vw;height: 80vh;display: flex;position: fixed;">
-      <img src="https://i0.wp.com/opportunitycell.com/wp-content/uploads/2021/07/iitdhanbad.png?fit=400%2C400&ssl=1" alt="#" style="width: 40vw; padding: 100px;">
+      <img src="/static/images/theme2.png" alt="#" style="width: 40vw; padding: 100px;">
       <div class="container mx-4" style="display: flex;flex-direction: column;justify-content: center;">
-        <h1 style="font-size: xx-large;" class="display-4 mb-4">Company Registration Portal</h1>
-        <a href="http://localhost:5000/index/login" class="btn btn-lg btn-warning">Login</a>
+        <h1 style="font-size: xx-large;" class="display-4 mb-4">Attendance Tracking System</h1>
+        <a href="<%= origin %>/index/login" class="btn btn-lg btn-warning">Login</a>
         <div style="padding: 40px;" class="card mt-4">
             <h3 style="text-align: center;" class="lead mb-4">Register as the following type:</h3>
-            <a href="http://localhost:5000/index/register_admin" class="btn btn-lg btn-danger">Admin</a><br>
-            <a href="http://localhost:5000/index/register_company" class="btn btn-lg btn-info">Company</a><br>
-            <a href="http://localhost:5000/index/register_student" class="btn btn-lg btn-primary">Student</a><br>
+            <a href="<%= origin %>/index/register_admin" class="btn btn-lg btn-danger">Admin</a><br>
+            <a href="<%= origin %>/index/register_student" class="btn btn-lg btn-info">Student</a><br>
         </div>
       </div>
 

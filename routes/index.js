@@ -15,6 +15,7 @@ const User              = require("../models/user"),
       Admin             = require("../models/admin"),
       Company           = require("../models/company"),
       Student           = require("../models/student"),
+      Attendance        = require("../models/attendance"),
       Inf               = require("../models/inf"),
       Jnf               = require("../models/jnf");
 
@@ -28,36 +29,20 @@ router.get('/', (req, res) => {
 })
 
 router.get('/home', (req, res) => {
-    res.render('homepage.ejs');
+    res.render('index/homepage.ejs', {origin: webKeys.WEB_ORIGIN});
 })
 
 router.get('/dashboard/:userId', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
     data = {};
     page = "";
     if(req.user.role === webKeys.USER_ROLES.ADMIN) {
-        page = "dashboard_admin.ejs";
-        Admin.findById(req.user.detailsId, (err, item) => {
-            if(err) res.redirect('/index/home');
-            else {
-                data = item;
-                console.log(page, data);
-                res.render(page, {detailsData: data});
-            }
-        });
+        res.redirect('/admin/' + req.params.userId + '/dashboard');
     }
     else if(req.user.role === webKeys.USER_ROLES.COMPANY) {
         res.redirect('/company/' + req.params.userId + '/dashboard');
     }
     else if(req.user.role === webKeys.USER_ROLES.STUDENT) {
-        page = "dashboard_student.ejs";
-        Student.findById(req.user.detailsId, (err, item) => {
-            if(err) res.redirect('/index/home');
-            else {
-                data = item;
-                console.log(page, data);
-                res.render(page, {detailsData: data});
-            }
-        });
+        res.redirect('/student/' + req.params.userId + '/dashboard');
     }  
 })
 
@@ -66,13 +51,12 @@ router.get('/dashboard/:userId', middlewareObj.isLoggedIn, middlewareObj.checkOw
 // ===================================================================
 
 router.get('/register', (req, res) => {
-    res.render('register_gen.ejs');
+    res.render('index/register_gen.ejs');
 })
 
 router.post('/register', (req, res) => {
     let userType = req.body.userType;
     if(userType === "Admin") res.redirect('/index/register_admin');
-    else if(userType === "Company") res.redirect('/index/register_company');
     else if(userType === "Student") res.redirect('/index/register_student');
     else res.redirect('/register');
 })
@@ -80,7 +64,7 @@ router.post('/register', (req, res) => {
 // Admin Registration:
 // -------------------------------------------------------------------
 router.get('/register_admin', (req, res) => {
-    res.render('register_admin.ejs');
+    res.render('index/register_admin.ejs', {origin: webKeys.WEB_ORIGIN});
 })
 
 router.post('/register_admin', (req, res) => {
@@ -88,7 +72,8 @@ router.post('/register_admin', (req, res) => {
     
     let nd = new Admin({
         email: req.body.email,
-        contact: req.body.contact
+        contact: req.body.contact,
+        companyName: req.body.companyName,
     });
     nd.save((err) => {
         if(err) {
@@ -169,7 +154,7 @@ router.post('/register_company', (req, res) => {
 // Student Registration:
 // -------------------------------------------------------------------
 router.get('/register_student', (req, res) => {
-    res.render('register_student.ejs');
+    res.render('index/register_student.ejs', {origin: webKeys.WEB_ORIGIN});
 })
 
 router.post('/register_student', (req, res) => {
@@ -177,14 +162,8 @@ router.post('/register_student', (req, res) => {
     
     let nd = new Student({
         full_name: req.body.full_name,
-        official_email: req.body.official_email,
-        personal_email: req.body.personal_email,
+        email: req.body.email,
         contact: req.body.contact,
-        admNo: req.body.admNo,
-        programme: req.body.programme,
-        branch: req.body.branch,
-        grad_year: req.body.grad_year,
-        cpi: req.body.cpi
     });
     nd.save((err) => {
         if(err) {
@@ -221,7 +200,7 @@ router.post('/register_student', (req, res) => {
 // ===================================================================
 
 router.get('/login', (req, res) => {
-    res.render('login.ejs');
+    res.render('index/login.ejs');
 })
 
 router.post(
@@ -236,7 +215,7 @@ router.post(
 
 router.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('/index/home');
+    res.redirect('/index/login');
 })
 
 

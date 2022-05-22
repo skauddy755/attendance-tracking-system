@@ -7,6 +7,7 @@ var adminSchema = new mongoose.Schema({
 	// userId: String, // id of user schema
     email: String,
     contact: String,
+    companyName: String,
 });
 
 module.exports = mongoose.model("Admin", adminSchema);

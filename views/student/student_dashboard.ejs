@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ATS | Student | Dashboard</title>
+    <%- include('../partials/header') %>
+  </head>
+  <body>
+    <%- include('../partials/sidebar') %>
+    <div class="page">
+      <!-- navbar-->
+      <header class="header">
+        <%- include('../partials/navbar') %>
+      </header>
+      
+      <!-- Page Header-->
+      <header class="py-4">
+        <div class="container-fluid py-2">
+          <h1 class="h3 fw-normal mb-0">Internship Notification Form</h1>
+        </div>
+      </header>
+      <!-- Forms Section-->
+      <section class="pb-5"> 
+        <div class="container-fluid">
+          <div class="row">
+            <!-- HR Info -->
+            <div class="col-lg-12 col-sm-12">
+              <div class="card">
+                <div class="card-header border-bottom" style="background-color: #c3decf;">
+                  <h3 style="font-size: x-large;" class="lead mb-0">HR info</h3>
+                </div>
+                <div class="card-body">
+                  <p class="text-sm lead">We'll never share your personal information with anyone else</p>
+                  
+                  <form id="poc_info">
+                    <div class="row">
+                      <div class="col-lg-6 col-sm-12">
+                        <div class="mb-3">
+                          <label class="form-label" for="email_poc1"><span style="color: maroon;">*</span> Email address of POC-1</label>
+                          <input class="form-control" name="email_poc1" id="email_poc1" type="email" aria-describedby="emailHelp" placeholder="name@example.com">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="name_poc1"><span style="color: maroon;">*</span> Name of POC-1</label>
+                          <input class="form-control" name="name_poc1" id="name_poc1" type="string">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="designation_poc1"><span style="color: maroon;">*</span> Designation of POC-1</label>
+                          <input class="form-control" name="designation_poc1" id="designation_poc1" type="string">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="mob_poc1"><span style="color: maroon;">*</span> Mobile Number of POC-1</label>
+                          <input class="form-control" name="mob_poc1" id="mob_poc1" type="number">
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-sm-12">
+                        <div class="mb-3">
+                          <label class="form-label" for="email_poc2">Email address of POC-2</label>
+                          <input class="form-control" name="email_poc2" id="email_poc2" type="email" aria-describedby="emailHelp" placeholder="name@example.com">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="name_poc2">Name of POC-2</label>
+                          <input class="form-control" name="name_poc2" id="name_poc2" type="string">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="designation_poc2">Designation of POC-2</label>
+                          <input class="form-control" name="designation_poc2" id="designation_poc2" type="string">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="mob_poc2">Mobile Number of POC-2</label>
+                          <input class="form-control" name="mob_poc2" id="mob_poc2" type="number">
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <button class="btn btn-primary" type="submit">Submit</button> -->
+                  </form>
+                </div>
+              </div>
+            </div>
+            
+
+            <!-- Confirmation Form -->
+            <div class="col-lg-6 col-sm-12">
+              <div class="card">
+                <div class="card-header border-bottom" style="background-color: #c3decf;">
+                  <h3 style="font-size: x-large;" class="lead mb-0">CONFIRM CHANGES</h3>
+                </div>
+                <div class="card-body">
+                  <form action="/company/<%= userId %>/inf/create" id="selection_process" method="POST">
+                    <p class="lead">
+                      The INF submitted can be edited later. However, the changes will be permanently saved only after approval from CDC-SCPT.
+                    </p>
+                    <input id="infData" type="text" name="infData" style="display: none;">
+                    <button id="submit" type="button" class="btn btn-lg btn-block btn-secondary">Save Changes</button>
+                    <button type="submit" class="btn btn-lg btn-block btn-primary">SUBMIT</button>
+                    <p id="mssg">
+                      <span style="color:#570814">Please save the changes before submitting</span>
+                    </p>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Job Notification Form  -->
+            
+
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

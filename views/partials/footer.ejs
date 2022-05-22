@@ -1,0 +1,50 @@
+    <!-- JavaScript files-->
+    <!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+    <!-- <script src="vendor/just-validate/js/just-validate.min.js"></script> -->
+    <!-- <script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script> -->
+    <!-- <script src="vendor/overlayscrollbars/js/OverlayScrollbars.min.js"></script> -->
+    <!-- <script src="js/charts-home.js"></script> -->
+    <!-- Main File-->
+    <!-- <script src="js/front.js"></script> -->
+
+
+    <script>
+        var dir = window.location.origin + "/static/";
+        exts = [
+            {
+                tag: "script",
+                src: dir + "vendor/bootstrap/js/bootstrap.bundle.min.js",
+            },
+            {
+                tag: "script",
+                src: dir + "vendor/chart.js/Chart.min.js",
+            },
+            {
+                tag: "script",
+                src: dir + "vendor/just-validate/js/just-validate.min.js",
+            },
+            {
+                tag: "script",
+                src: dir + "vendor/choices.js/public/assets/scripts/choices.min.js",
+            },
+            {
+                tag: "script",
+                src: dir + "vendor/overlayscrollbars/js/OverlayScrollbars.min.js",
+            },
+            {
+                tag: "script",
+                src: dir + "js/charts-home.js",
+            },
+            {
+                tag: "script",
+                src: dir + "js/front.js",
+            },
+        ];
+        console.log(exts);
+        load_static_assets(exts, 'body');
+    </script>
+
+    <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+

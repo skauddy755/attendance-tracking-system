@@ -8,6 +8,7 @@ const express           = require("express"),
       flash             = require('connect-flash'),
       dotenv            = require("dotenv").config();
 
+const req = require("express/lib/request");
 const webKeys           = require("./config/webKeys.js"),
       seedDB            = require("./config/seedDB.js");
 
@@ -15,6 +16,7 @@ const User              = require("./models/user"),
       Admin             = require("./models/admin"),
       Company           = require("./models/company"),
       Student           = require("./models/student"),
+      Attendance        = require("./models/attendance"),
       Inf               = require("./models/inf"),
       Jnf               = require("./models/jnf");
 
@@ -70,6 +72,18 @@ app.use("/docs/", express.static(path.join(__dirname, 'public', 'docs')));
 app.use("/test", require('./routes/test'));
 app.use("/index", require('./routes/index'));
 app.use("/company", require('./routes/company'));
+app.use("/admin", require('./routes/admin'));
+app.use("/student", require('./routes/student'));
+
+app.get('/', (req, res) => {
+    if(req.user) {
+        console.log(req.user);
+        res.redirect('index/dashboard/'+req.user._id);
+    }
+    else {
+        res.redirect('index/home');
+    }
+});
 
 
 // ================================================================

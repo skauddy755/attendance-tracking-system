@@ -8,7 +8,7 @@ var userSchema = new mongoose.Schema({
     password: String,
     role: {
         type: String,
-        enum: [USER_ROLES.ADMIN, USER_ROLES.COMPANY, USER_ROLES.STUDENT]
+        enum: [USER_ROLES.ADMIN, USER_ROLES.STUDENT]
     },
     isVerified: Boolean,
     detailsId: String // id of either of the following {Admin, Company, Student}

@@ -3,16 +3,22 @@ const express = require("express"),
 
 const pdf = require('pdf-creator-node');
 const fs = require('fs');
+const webKeys = require("../config/webKeys.js");
 
 const router = express.Router();
 
-router.get('/testPage', (req, res) => {
-    res.render("register.ejs");
-});
+// router.get('/testPage/:userId', (req, res) => {
+//     res.render("student/student_dashboard.ejs", {userId: 9303290, origin: webKeys.WEB_ORIGIN});
+// });
 
-router.post('/testPage', (req, res) => {
-    console.log(req.body);
-    res.redirect("/testPage")
+router.get('/testPage/test/:pageName', (req, res) => {
+    res.render("test/"+req.params.pageName, {origin: webKeys.WEB_ORIGIN});
+});
+router.get('/testPage/admin/:pageName', (req, res) => {
+    res.render("admin/"+req.params.pageName, {origin: webKeys.WEB_ORIGIN});
+});
+router.get('/testPage/student/:pageName', (req, res) => {
+    res.render("student/"+req.params.pageName, {origin: webKeys.WEB_ORIGIN});
 });
 
 router.get('/testejs', (req, res) => {

@@ -6,14 +6,10 @@ const USER_ROLES = require('../config/webKeys').USER_ROLES
 var studentSchema = new mongoose.Schema({
 	// userId: String, // id of user schema
     full_name: String,
-    official_email: String,
-    personal_email: String,
+    email: String,
     contact: String,
-    admNo: String,
-    programme: String,
-    branch: String,
-    grad_year: Number,
-    cpi: Number
+    orgs: [String], // array of Admin Ids
+    infos: mongoose.Schema.Types.Mixed,
 });
 
 module.exports = mongoose.model("Student", studentSchema);
