@@ -96,4 +96,18 @@ router.get('/download', (req, res) => {
     res.render('test/downloadPage.ejs');
 })
 
+router.get('/upload', (req, res) => {
+    res.render('test/upload.ejs', {origin: webKeys.WEB_ORIGIN});
+});
+
+router.post('/upload', (req, res) => {
+    console.log(req.files);
+    var mf = req.files.myNewFile;
+	var filename = mf.name;
+    mf.mv('./public/assets1/face-api/images/' + filename, (err) => {
+        if(err) console.log(err);
+        else res.render('test/upload.ejs', {origin: webKeys.WEB_ORIGIN});
+    });
+});
+
 module.exports = router;

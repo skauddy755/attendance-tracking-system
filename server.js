@@ -6,6 +6,8 @@ const express           = require("express"),
       session           = require('express-session'),
       methodOverride    = require('method-override'),
       flash             = require('connect-flash'),
+      upload            = require("express-fileupload"),
+      fs                = require("fs"),
       dotenv            = require("dotenv").config();
 
 const req = require("express/lib/request");
@@ -34,6 +36,7 @@ mongoose.connect(mongo_uri, {useUnifiedTopology:true, useNewUrlParser:true})
 // ================================================================
 // APP UTILITIES SETUP:
 // ================================================================
+app.use(upload());
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
