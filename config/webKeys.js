@@ -8,7 +8,8 @@ const webKeys = {
         COMPANY: "COMPANY",
         STUDENT: "STUDENT"
     },
-    WEB_ORIGIN: "http://localhost:5000"
+    // WEB_ORIGIN: "http://localhost:5000"
+    WEB_ORIGIN: "https://engage-attendance.herokuapp.com"
 };
 
 module.exports = webKeys;
