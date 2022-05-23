@@ -25,7 +25,11 @@ $(document).ready(function(){
         // faceapi.draw.drawFaceExpressions(canvas, faceDescriptions)
 
         
-        const labels = ['ross', 'rachel', 'chandler', 'monica', 'phoebe', 'joey', 'auddy']
+        const labels = ['ross', 'rachel', 'chandler', 'monica', 'phoebe', 'joey']
+        stdData = JSON.parse(document.getElementById("stdData").value);
+        for(s of stdData) {
+            labels.push(String(s._id));
+        }
 
         const labeledFaceDescriptors = await Promise.all(
             labels.map(async label => {
@@ -49,6 +53,23 @@ $(document).ready(function(){
 
         const results = faceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
         console.log(results);
+        let present = false;
+        for(result of results) {
+            const stdUserId = document.getElementById("stdUserId").value;
+            console.log(stdUserId, result._label, stdUserId == result._label);
+            if(result._label == stdUserId) present = true;
+        }
+        document.getElementById("present").value = String(present);
+        if(present) {
+            document.getElementById("status").style.display = "none";
+            document.getElementById("true").style.display = "inline";
+            document.getElementById("false").style.display = "none";
+        }
+        else {
+            document.getElementById("status").style.display = "none";
+            document.getElementById("true").style.display = "none";
+            document.getElementById("false").style.display = "inline";
+        }
         // results.forEach((bestMatch, i) => {
         //     const box = faceDescriptions[i].detection.box
         //     const text = bestMatch.toString()
@@ -59,6 +80,12 @@ $(document).ready(function(){
     }
     
     document.getElementById("classify").addEventListener('click', function(){
+        let status = document.getElementById("status");
+        status.style.display = "inline";
+        status.innerText = "Verying, Please Wait";
+
+        document.getElementById("true").style.display = "none";
+        document.getElementById("false").style.display = "none";
         face();
     });
 })
