@@ -65,6 +65,10 @@ async function get_sidebar_data(userId) {
                 title: "View Students",
                 link: `${webKeys.WEB_ORIGIN}/admin/${userId}/view_students`
             },
+            {
+                title: "Track Attendance",
+                link: `${webKeys.WEB_ORIGIN}/admin/${userId}/track_attendance`
+            },
         ]
     };
 
@@ -194,6 +198,26 @@ router.post('/:userId/add_students', middlewareObj.isLoggedIn, middlewareObj.che
                     });
                 }
             });
+        }
+    });
+});
+
+
+// =================================================================================
+// TRACK ATTENDANCE:
+// =================================================================================
+router.get('/:userId/track_attendance', (req, res) => {
+    Attendance.find({adminId: req.params.userId}, async (err, attData) => {
+        if(err) res.redirect('/index/home');
+        else {
+            for(let i=0; i<attData.length; i++) {
+                const stdUser = await User.findById(attData[i].studentId);
+                const std = await Student.findById(stdUser.detailsId);
+                attData[i].full_name = std.full_name;
+            }
+            const sidebar = await get_sidebar_data(req.params.userId);
+            console.log(attData);
+            res.render('admin/track_attendance.ejs', {sidebar, attData, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
         }
     });
 });

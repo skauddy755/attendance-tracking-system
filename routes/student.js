@@ -20,6 +20,8 @@ const User              = require("../models/user"),
       Jnf               = require("../models/jnf");
 
 const middlewareObj     = require('../middleware/index');
+const attendance = require("../models/attendance");
+const { rmSync } = require("fs");
 
 
 const router = express.Router();
@@ -72,6 +74,23 @@ async function get_sidebar_data(userId) {
 
     return data;
 }
+
+async function get_admins(stdUserId) {
+    const data = [];
+    let adminUsers = await User.find({role: webKeys.USER_ROLES.ADMIN});
+    for(let adminUser of adminUsers) {
+        let admin = await Admin.findById(adminUser.detailsId);
+        for(let student of admin.students) {
+            if(student == stdUserId) {
+                admin.userId = adminUser._id;
+                data.push(admin);
+                break;
+            }
+        }
+    }
+    return data;
+}
+
 // =====================================
 
 router.get('/:userId/dashboard', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
@@ -185,6 +204,18 @@ router.get('/:userId/give_attendance/:adminUserId', middlewareObj.isLoggedIn, mi
 
 router.post('/:userId/give_attendance/:adminUserId', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
     console.log(req.body.present);
+    let att = new Attendance({
+        instance: new Date(),
+        adminId: req.params.adminUserId, // id of admin (org)
+        studentId: req.params.userId, //id of student/student
+        infos: {}
+    });
+    att.save((err) => {
+        if(err) res.redirect('/index/home');
+        else {
+            res.redirect(`/student/${req.params.userId}/dashboard`);
+        }
+    });
 });
 
 
@@ -220,5 +251,25 @@ router.post('/:userId/register_face', middlewareObj.isLoggedIn, middlewareObj.ch
     });
 });
 
+// =================================================================================
+// TRACK ATTENDANCE:
+// =================================================================================
+router.get('/:userId/track_attendance', (req, res) => {
+    Attendance.find({studentId: req.params.userId}, async (err, attData) => {
+        if(err) res.redirect('/index/home');
+        else {
+            for(let i=0; i<attData.length; i++) {
+                const adminUser = await User.findById(attData[i].adminId);
+                const admin = await Admin.findById(adminUser.detailsId);
+                attData[i].companyName = admin.companyName;
+            }
+            const sidebar = await get_sidebar_data(req.params.userId);
+            const admins = await get_admins(req.params.userId);
+            console.log(admins);
+            console.log(attData);
+            res.render('student/track_attendance.ejs', {sidebar, admins, attData, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+        }
+    });
+});
 
 module.exports = router;
