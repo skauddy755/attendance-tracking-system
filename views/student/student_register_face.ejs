@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ATS | Student | Profile</title>
+    <%- include('../partials/header') %>
+  </head>
+  <body>
+    <%- include('../partials/sidebar') %>
+    <div class="page">
+      <!-- navbar-->
+      <header class="header">
+        <%- include('../partials/navbar') %>
+      </header>
+      
+      <!-- Page Header-->
+      <header class="py-4">
+        <div class="container-fluid py-2">
+        </div>
+      </header>
+      <!-- Forms Section-->
+      <section class="pb-5"> 
+        <div class="container-fluid">
+          <div class="row">
+            <!-- HR Info -->
+            <div class="col-lg-2 col-md-1 col-sm-0"></div>
+            <div class="col-lg-8 col-md-10 col-sm-12">
+              <div class="card">
+                <div class="card-header border-bottom" style="background-color: #c3decf;">
+                  <h3 style="font-size: x-large;" class="lead mb-0">Upload an image file for your face</h3>
+                </div>
+                <div class="card-body">
+                  <form action="<%= origin %>/student/<%= userId %>/register_face" method="POST" class="form-group" enctype='multipart/form-data'>
+                      <input type="file" name="myNewFile" accept="image/.jpg" class="form-control">
+                      <p class="lead">
+                        <strong>Allowed Extensions: </strong>
+                        <span style="color: green;">.jpg</span>
+                      </p>
+                      <button type="submit" class="btn btn-lg btn-block btn-success mt-4">Done</button>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-1 col-sm-0"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <%- include('../partials/footer') %>
+  </body>
+</html>

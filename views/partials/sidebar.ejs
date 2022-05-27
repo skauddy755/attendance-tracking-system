@@ -5,35 +5,26 @@
       <!-- User Info-->
       <div class="sidenav-header-inner text-center">
         <!-- <img class="img-fluid rounded-circle avatar mb-3" src="img/avatar-7.jpg" alt="person"> -->
-        <h2 class="h5 text-white text-uppercase mb-0">Nathan_Andrews</h2>
-        <p class="text-sm mb-0 text-muted">HR | GOOGLE</p>
+        <h2 class="h5 text-white text-uppercase mb-0"><%= sidebar.menu_username %></h2>
+        <p class="text-sm mb-0 text-muted"><%= sidebar.menu_role %></p>
       </div>
       <!-- Small Brand information, appears on minimized sidebar--><a class="brand-small text-center" href="index.html">
         <p class="h1 m-0">BD</p></a>
     </div>
     <!-- Sidebar Navigation Menus-->
-    <span class="text-uppercase text-gray-500 text-sm fw-bold letter-spacing-0 mx-lg-2 heading">Main</span>
-    <ul class="list-unstyled">                  
-      <li class="sidebar-item"><a class="sidebar-link" href="index.html"> 
-          <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
-            <use xlink:href="#real-estate-1"> </use>
-          </svg>My Profile </a></li>
+    <!-- <span class="text-uppercase text-gray-500 text-sm fw-bold letter-spacing-0 mx-lg-2 heading">Main</span> -->
+    <ul class="list-unstyled">
+      <% for(menu_link of sidebar.menu_links) { %>                  
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="<%= menu_link.link %>"> 
+            <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
+              <use xlink:href="#real-estate-1"> </use>
+            </svg><%= menu_link.title %>
+          </a>
+        </li>
+      <% } %>
       
-      <li class="sidebar-item"><a class="sidebar-link" href="forms.html"> 
-        <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
-          <use xlink:href="#survey-1"> </use>
-        </svg>My Forms </a>
-      </li>
-      <li class="sidebar-item"><a class="sidebar-link" href="forms.html"> 
-        <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
-          <use xlink:href="#browser-window-1"> </use>
-        </svg>Fill INF </a>
-      </li>
-      <li class="sidebar-item"><a class="sidebar-link" href="forms.html"> 
-        <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
-          <use xlink:href="#browser-window-1"> </use>
-        </svg>Fill JNF </a>
-      </li>
+
 
       <!-- <li class="sidebar-item"><a class="sidebar-link" href="#exampledropdownDropdown" data-bs-toggle="collapse"> 
           <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
@@ -44,14 +35,10 @@
           <li><a class="sidebar-link" href="./inf.html">INF</a></li> 
         </ul> 
       </li> -->
-      <li class="sidebar-item"><a class="sidebar-link" href="login.html"> 
+      <hr>
+      <li class="sidebar-item"><a class="sidebar-link" href="<%= origin %>/index/logout"> 
           <svg class="svg-icon svg-icon-sm svg-icon-heavy me-xl-2">
             <use xlink:href="#disable-1"> </use>
-          </svg>Login page </a></li>
-      <li class="sidebar-item"><a class="sidebar-link" href="#!"> 
-          <svg class="svg-icon svg-icon-xs svg-icon-heavy me-xl-2">
-            <use xlink:href="#imac-screen-1"> </use>
-          </svg>Contact
-          <div class="badge bg-warning">6 New</div></a></li>
-      </ul>
+          </svg>Logout</a>
+      </li>
   </nav>

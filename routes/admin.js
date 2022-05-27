@@ -26,17 +26,62 @@ const router = express.Router();
 
 // HELPER FUNCTIONS:
 // =====================================
+async function get_sidebar_data(userId) {
+    let data = {
+        menu_userId: userId,
+        menu_username: "--username--",
+        menu_role: webKeys.USER_ROLES.ADMIN,
+    
+        menu_admin_companyName: "--companyName--",
+        menu_admin_email: "--email--",
+        menu_admin_contact: "--contact--",
+        menu_admin_students: [],
+
+        menu_links: []
+    };
+    
+    adminUser = await User.findById(userId);
+    admin = await Admin.findById(adminUser.detailsId);
+    data = {
+        menu_userId: userId,
+        menu_username: adminUser.username,
+        menu_role: webKeys.USER_ROLES.ADMIN,
+    
+        menu_admin_companyName: admin.companyName,
+        menu_admin_email: admin.email,
+        menu_admin_contact: admin.contact,
+        menu_admin_students: admin.students,
+
+        menu_links: [
+            {
+                title: "My Profile",
+                link: `${webKeys.WEB_ORIGIN}/admin/${userId}/profile`
+            },
+            {
+                title: "Dashboard",
+                link: `${webKeys.WEB_ORIGIN}/admin/${userId}/dashboard`
+            },
+            {
+                title: "View Students",
+                link: `${webKeys.WEB_ORIGIN}/admin/${userId}/view_students`
+            },
+        ]
+    };
+
+    return data;
+}
 // =====================================
 
 router.get('/:userId/dashboard', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
     
     page = "admin/admin_dashboard.ejs";
-    Admin.findById(req.user.detailsId, (err, item) => {
+    Admin.findById(req.user.detailsId, async (err, item) => {
         if(err) res.redirect('/index/home');
         else {
             data = item;
             console.log(page, data);
-            res.render(page, {detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+            const sidebar = await get_sidebar_data(req.params.userId);
+            res.render(page, {sidebar, detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
         }
     });
 })
@@ -48,9 +93,10 @@ router.get('/:userId/profile', middlewareObj.isLoggedIn, middlewareObj.checkOwne
     User.findById(req.params.userId, async (err, user) => {
         if(err) res.redirect('/index/home');
         else {
-            Admin.findById(user.detailsId, (err, admin) => {
-                admin.username = user.username,
-                res.render('admin/admin_profile.ejs', {adminData: admin, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+            Admin.findById(user.detailsId, async (err, admin) => {
+                admin.username = user.username;
+                const sidebar = await get_sidebar_data(req.params.userId);
+                res.render('admin/admin_profile.ejs', {sidebar, adminData: admin, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
             });
         }
     });
@@ -82,7 +128,8 @@ router.get('/:userId/view_students', middlewareObj.isLoggedIn, middlewareObj.che
                                 data.push(std);
                             }
                             console.log(data);
-                            res.render('admin/admin_view_students', {detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN})
+                            const sidebar = await get_sidebar_data(req.params.userId);
+                            res.render('admin/admin_view_students', {sidebar, detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN})
                         }
                     });
                 }
@@ -90,6 +137,19 @@ router.get('/:userId/view_students', middlewareObj.isLoggedIn, middlewareObj.che
         }
     });
     
+});
+
+router.get('/:userId/view_student/:stdUserId', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
+    User.findById(req.params.stdUserId, async (err, user) => {
+        if(err) res.redirect('/index/home');
+        else {
+            Student.findById(user.detailsId, async (err, std) => {
+                std.username = user.username;
+                const sidebar = await get_sidebar_data(req.params.userId);
+                res.render('admin/admin_student_profile.ejs', {sidebar, studentData: std, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+            });
+        }
+    });
 });
 
 
@@ -110,7 +170,8 @@ router.get('/:userId/add_students', middlewareObj.isLoggedIn, middlewareObj.chec
                 }
             }
             console.log(data);
-            res.render('admin/admin_add_students.ejs', {detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+            const sidebar = await get_sidebar_data(req.params.userId);
+            res.render('admin/admin_add_students.ejs', {sidebar, detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
         }
     });
 })

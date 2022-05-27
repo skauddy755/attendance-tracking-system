@@ -26,17 +26,65 @@ const router = express.Router();
 
 // HELPER FUNCTIONS:
 // =====================================
+async function get_sidebar_data(userId) {
+    let data = {
+        menu_userId: userId,
+        menu_username: "--username--",
+        menu_role: webKeys.USER_ROLES.STUDENT,
+    
+        menu_student_full_name: "--full_name--",
+        menu_student_email: "--email--",
+        menu_student_contact: "--contact--",
+        menu_student_orgs: [],
+        menu_student_infos: {},
+
+        menu_links: []
+    };
+    
+    stdUser = await User.findById(userId);
+    std = await Student.findById(stdUser.detailsId);
+    data = {
+        menu_userId: userId,
+        menu_username: stdUser.username,
+        menu_role: webKeys.USER_ROLES.STUDENT,
+    
+        menu_student_full_name: std.full_name,
+        menu_student_email: std.email,
+        menu_student_contact: std.contact,
+        menu_student_orgs: [],
+        menu_student_infos: {},
+
+        menu_links: [
+            {
+                title: "My Profile",
+                link: `${webKeys.WEB_ORIGIN}/student/${userId}/profile`
+            },
+            {
+                title: "Dashboard",
+                link: `${webKeys.WEB_ORIGIN}/student/${userId}/dashboard`
+            },
+            {
+                title: "Track Attendance",
+                link: `${webKeys.WEB_ORIGIN}/student/${userId}/track_attendance`
+            },
+        ]
+    };
+
+    return data;
+}
 // =====================================
 
 router.get('/:userId/dashboard', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
     
     page = "student/student_dashboard.ejs";
-    Student.findById(req.user.detailsId, (err, item) => {
+    Student.findById(req.user.detailsId, async (err, item) => {
         if(err) res.redirect('/index/home');
         else {
             data = item;
             console.log(page, data);
-            res.render(page, {detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+            const sidebar = await get_sidebar_data(req.params.userId);
+            console.log(sidebar);
+            res.render(page, {detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN, sidebar});
         }
     });
 })
@@ -50,9 +98,10 @@ router.get('/:userId/profile', middlewareObj.isLoggedIn, middlewareObj.checkOwne
     User.findById(req.params.userId, async (err, user) => {
         if(err) res.redirect('/index/home');
         else {
-            Student.findById(user.detailsId, (err, std) => {
-                std.username = user.username,
-                res.render('student/student_profile.ejs', {studentData: std, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+            Student.findById(user.detailsId, async (err, std) => {
+                std.username = user.username;
+                const sidebar = await get_sidebar_data(req.params.userId);
+                res.render('student/student_profile.ejs', {sidebar, studentData: std, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
             });
         }
     });
@@ -66,7 +115,7 @@ router.get('/:userId/view_orgs', middlewareObj.isLoggedIn, middlewareObj.checkOw
     User.findById(req.params.userId, async (err, user) => {
         if(err) res.redirect('/index/home');
         else {
-            Admin.find({}, (err, admins) => {
+            Admin.find({}, async (err, admins) => {
                 const data = [];
                 for(a of admins) {
                     if(!a.students) continue;
@@ -78,7 +127,8 @@ router.get('/:userId/view_orgs', middlewareObj.isLoggedIn, middlewareObj.checkOw
                     }
                 }
                 console.log(data);
-                res.render('student/student_view_orgs.ejs', {detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+                const sidebar = await get_sidebar_data(req.params.userId);
+                res.render('student/student_view_orgs.ejs', {sidebar, detailsData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
             });
         }
     });
@@ -105,7 +155,8 @@ router.get('/:userId/give_attendance_select_org/', middlewareObj.isLoggedIn, mid
                 }
             }
             console.log(data);
-            res.render('student/give_attendance_select_org.ejs', {adminData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+            const sidebar = await get_sidebar_data(req.params.userId);
+            res.render('student/give_attendance_select_org.ejs', {sidebar, adminData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
         }
     });
 });
@@ -120,19 +171,53 @@ router.post('/:userId/give_attendance_select_org/', middlewareObj.isLoggedIn, mi
 router.get('/:userId/give_attendance/:adminUserId', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
     let stdUserId = req.params.userId;
     let adminUserId = req.params.adminUserId;
-    User.find({}, (err, users) => {
+    User.find({}, async (err, users) => {
         const data = [];
         for(user of users) {
             if(user.role === webKeys.USER_ROLES.STUDENT) {
                 data.push(user);
             }
         }
-        res.render('student/give_attendance.ejs', {stdData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN, stdUserId, adminUserId});
+        const sidebar = await get_sidebar_data(req.params.userId);
+        res.render('student/give_attendance.ejs', {sidebar, stdData: data, userId: req.params.userId, origin: webKeys.WEB_ORIGIN, stdUserId, adminUserId});
     });
 });
 
 router.post('/:userId/give_attendance/:adminUserId', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
     console.log(req.body.present);
+});
+
+
+// =================================================================================
+// REGISTER FACE:
+// =================================================================================
+router.get('/:userId/register_face', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
+    User.findById(req.params.userId, async (err, stdUser) => {
+        if(err) res.redirect('/index/home');
+        else {
+            const sidebar = await get_sidebar_data(req.params.userId);
+            res.render('student/student_register_face.ejs', {sidebar, stdData: stdUser, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+        }
+    });
+});
+
+
+router.post('/:userId/register_face', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
+    User.findById(req.params.userId, (err, stdUser) => {
+        if(err) res.redirect('/index/home');
+        else {
+            console.log(req.files);
+            var mf = req.files.myNewFile;
+            var filename = mf.name;
+            mf.mv('./public/assets1/face-api/images/' + req.params.userId + '.jpg', (err) => {
+                if(err) {
+                    console.log(err);
+                    res.redirect(`/student/${req.params.userId}/dashboard`);
+                }
+                else res.redirect(`/student/${req.params.userId}/dashboard`);
+            });
+        }
+    });
 });
 
 
