@@ -130,6 +130,7 @@ router.get('/:userId/profile', middlewareObj.isLoggedIn, middlewareObj.checkOwne
 // =================================================================================
 // VIEW ORGS:
 // =================================================================================
+
 router.get('/:userId/view_orgs', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, (req, res) => {
     User.findById(req.params.userId, async (err, user) => {
         if(err) res.redirect('/index/home');
@@ -140,7 +141,15 @@ router.get('/:userId/view_orgs', middlewareObj.isLoggedIn, middlewareObj.checkOw
                     if(!a.students) continue;
                     for(s of a.students) {
                         if(s == user._id) {
-                            data.push(a);
+                            console.log(a);
+                            const au = await User.find({detailsId: a._id});
+                            au.companyName = a.companyName;
+                            au.email = a.email;
+                            au.contact = a.contact;
+                            au.students = a.students;
+                            au.adminId = a._id;
+                            console.log(au);
+                            data.push(au);
                             break;
                         }
                     }
@@ -152,6 +161,18 @@ router.get('/:userId/view_orgs', middlewareObj.isLoggedIn, middlewareObj.checkOw
         }
     });
 })
+
+router.get('/:userId/view_org/:adminId', middlewareObj.isLoggedIn, middlewareObj.checkOwnership, async (req, res) => {
+    Admin.findById(req.params.adminId, async (err, admin) => {
+        if(err) res.redirect('/index/home');
+        else {
+            console.log(admin);
+            const sidebar = await get_sidebar_data(req.params.userId);
+            res.render('student/student_admin_profile.ejs', {sidebar, adminData: admin, userId: req.params.userId, origin: webKeys.WEB_ORIGIN});
+        }
+    });
+});
+
 
 // =================================================================================
 // ATTENDANCE:
