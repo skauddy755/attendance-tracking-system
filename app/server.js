@@ -16,11 +16,8 @@ const webKeys           = require("./config/webKeys.js"),
 
 const User              = require("./models/user"),
       Admin             = require("./models/admin"),
-      Company           = require("./models/company"),
       Student           = require("./models/student"),
-      Attendance        = require("./models/attendance"),
-      Inf               = require("./models/inf"),
-      Jnf               = require("./models/jnf");
+      Attendance        = require("./models/attendance");
 
 const app = new express();
 
@@ -68,13 +65,14 @@ app.use(function(req, res, next){
 // ================================================================
 // Serve static assets and use routes:
 // ================================================================
+
 app.use("/static/", express.static(path.join(__dirname, 'public', 'assets1')));
-app.use("/docs/", express.static(path.join(__dirname, 'public', 'docs')));
+
+// ----------------------------------------------------------------
 // Use routes:
 //-----------------------------------------------------------------
 app.use("/test", require('./routes/test'));
 app.use("/index", require('./routes/index'));
-app.use("/company", require('./routes/company'));
 app.use("/admin", require('./routes/admin'));
 app.use("/student", require('./routes/student'));
 

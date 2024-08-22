@@ -13,11 +13,8 @@ const webKeys           = require("../config/webKeys.js"),
 
 const User              = require("../models/user"),
       Admin             = require("../models/admin"),
-      Company           = require("../models/company"),
       Student           = require("../models/student"),
-      Attendance        = require("../models/attendance"),
-      Inf               = require("../models/inf"),
-      Jnf               = require("../models/jnf");
+      Attendance        = require("../models/attendance");
 
 const middlewareObj     = require('../middleware/index');
 
