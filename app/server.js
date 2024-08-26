@@ -24,7 +24,7 @@ const app = new express();
 // ================================================================
 // MONGO-DB SETUP:
 // ================================================================
-const mongo_uri = process.env.MONGO_URI_PROD;
+const mongo_uri = process.env.MONGO_URI;
 console.log(mongo_uri);
 console.log(process.env.NODE_ENV);
 mongoose.connect(mongo_uri, {useUnifiedTopology:true, useNewUrlParser:true})
@@ -67,6 +67,7 @@ app.use(function(req, res, next){
 // ================================================================
 
 app.use("/static/", express.static(path.join(__dirname, 'public', 'assets1')));
+app.use("/userdata/", express.static(path.join(__dirname, '..', 'userdata')));
 
 // ----------------------------------------------------------------
 // Use routes:

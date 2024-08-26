@@ -1,0 +1,32 @@
+version: '3'
+services:
+  mongo_service:
+    image: mongo:4.2.3
+    ports:
+      - "27017:27017"
+    networks:
+      - ats_network
+    volumes:
+      - mongo_data:/data/db
+    
+
+  ats_app_service:
+    build: ./app/
+    ports:
+      - "5000:5000"
+    networks:
+      - ats_network
+    depends_on:
+      - mongo_service
+    volumes:
+      - userdata:/attendance_tracking_system/userdata
+
+networks:
+  ats_network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local
+  userdata:
+    driver: local

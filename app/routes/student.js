@@ -258,7 +258,8 @@ router.post('/:userId/register_face', middlewareObj.isLoggedIn, middlewareObj.ch
             console.log(req.files);
             var mf = req.files.myNewFile;
             var filename = mf.name;
-            mf.mv('./public/assets1/face-api/images/' + req.params.userId + '.jpg', (err) => {
+            console.log(path.join(__dirname, '..', '..', 'userdata', req.params.userId + '.jpg'));
+            mf.mv(path.join(__dirname, '..', '..', 'userdata', req.params.userId + '.jpg'), (err) => {
                 if(err) {
                     console.log(err);
                     res.redirect(`/student/${req.params.userId}/dashboard`);

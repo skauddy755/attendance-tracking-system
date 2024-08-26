@@ -25,7 +25,7 @@ $(document).ready(function(){
         // faceapi.draw.drawFaceExpressions(canvas, faceDescriptions)
 
         
-        const labels = ['ross', 'rachel', 'chandler', 'monica', 'phoebe', 'joey']
+        const labels = []
         stdData = JSON.parse(document.getElementById("stdData").value);
         for(s of stdData) {
             labels.push(String(s._id));
@@ -34,7 +34,7 @@ $(document).ready(function(){
         const labeledFaceDescriptors = await Promise.all(
             labels.map(async label => {
 
-                const imgUrl = `${web_origin}/static/face-api/images/${label}.jpg`
+                const imgUrl = `${web_origin}/userdata/${label}.jpg`
                 const img = await faceapi.fetchImage(imgUrl)
                 
                 const faceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
