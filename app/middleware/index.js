@@ -12,10 +12,7 @@ const webKeys           = require("../config/webKeys.js"),
 
 const User              = require("../models/user"),
       Admin             = require("../models/admin"),
-      Company           = require("../models/company"),
-      Student           = require("../models/student"),
-      Inf               = require("../models/inf"),
-      Jnf               = require("../models/jnf");
+      Student           = require("../models/student");
 
 const indexRoutes       = require('../routes/index'),
       testRoutes        = require('../routes/test');
