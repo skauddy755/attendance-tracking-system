@@ -24,9 +24,9 @@ const app = new express();
 // ================================================================
 // MONGO-DB SETUP:
 // ================================================================
-const mongo_uri = process.env.MONGO_URI;
+const mongo_uri = webKeys.MONGO_URI;
 console.log(mongo_uri);
-console.log(process.env.NODE_ENV);
+console.log(webKeys.NODE_ENV);
 mongoose.connect(mongo_uri, {useUnifiedTopology:true, useNewUrlParser:true})
     .then(() => {});
 
@@ -91,7 +91,7 @@ app.get('/', (req, res) => {
 // ================================================================
 // START EXPRESS APP:
 // ================================================================
-const port = process.env.PORT || 5000;
+const port = webKeys.PORT;
 app.listen(port, function(){
     console.log(`Server is running at Port: ${port}`);
 });

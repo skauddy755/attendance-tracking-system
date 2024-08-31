@@ -20,6 +20,14 @@ services:
       - mongo_service
     volumes:
       - userdata:/attendance_tracking_system/userdata
+    environment:
+      - CONTAINERIZED_MONGO_URI=mongodb://mongo_service:27017/
+      - HOSTED_MONGO_URI=mongodb+srv://skauddy755:111@cluster0.ptknd.mongodb.net/
+      - MONGO_SELECT=0 # 0: containerized mongo, 1: hosted mongo
+      - NODE_ENV=production
+      - HOST=localhost
+      - PORT=5000
+      - WEB_ORIGIN=http://localhost:5000
 
 networks:
   ats_network:
